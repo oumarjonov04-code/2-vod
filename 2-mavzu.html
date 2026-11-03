@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="uz"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2-mavzu Markazga intilma kuch</title>
+<style>
+:root{--navy:#142747;--blue:#2f75c5;--orange:#f09a38;--green:#23976b;--bg:#f3f7fb;--ink:#233247;--line:#dbe5ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Arial,sans-serif;line-height:1.5}
+header{background:linear-gradient(120deg,#142747,#245f96);color:white;padding:28px max(24px,calc((100% - 1100px)/2))}header h1{margin:0 0 8px;font-size:clamp(1.7rem,4vw,2.5rem)}header p{margin:0;color:#d9f4ff}
+main{width:calc(100% - 32px);max-width:1100px;margin:22px auto;padding:0 8px 35px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tabs button{border:1px solid var(--line);background:white;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:700}.tabs button.active,.primary{background:var(--blue);color:white;border-color:var(--blue)}
+.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:15px}.card{background:white;border:1px solid var(--line);border-radius:15px;padding:17px;margin-bottom:15px;box-shadow:0 5px 18px #1427470b}
+h2{margin:0 0 10px;color:var(--navy);font-size:1.25rem}h3{margin:12px 0 5px;color:var(--navy)}label{display:block;font-weight:650;margin:13px 0 5px}input[type=range]{width:100%;accent-color:var(--blue)}button,select{font:inherit;border:1px solid #c8d6e5;border-radius:8px;padding:9px 11px;background:white;color:var(--ink)}button{cursor:pointer;font-weight:650}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.value{font-weight:800;color:var(--blue)}canvas{width:100%;height:330px;display:block;border:1px solid var(--line);border-radius:10px;background:#fbfdff}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.stat{background:#f1f6fb;padding:10px;border-radius:9px}.stat small{display:block;color:#64748b;font-size:.78rem}.stat strong{color:var(--navy);font-size:1.05rem}.note{background:#eef8fb;border-left:4px solid #35b9cc;padding:11px 13px;border-radius:7px;margin:12px 0}.formula{font-size:1.15rem;font-weight:800;background:#f1f6fb;padding:12px;border-radius:9px;color:var(--navy)}.muted{color:#64748b;font-size:.9rem}details{background:#f7fafc;padding:9px;border-radius:7px}footer{max-width:1100px;margin:0 auto;padding:0 24px 24px;color:#64748b}canvas{max-width:100%}
+@media(max-width:480px){main{width:100%;padding:0 14px 28px}.card{padding:14px}.tabs button{padding:9px 10px;font-size:.9rem}header{padding:24px 20px}}
+@media(max-width:800px){.grid{grid-template-columns:1fr}canvas{height:290px}.stats{grid-template-columns:1fr 1fr}header{padding:24px 18px}}
+.vdbar{display:flex;gap:10px;align-items:center;margin-top:10px}.vdbar input{flex:1}.vdbar span{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);min-width:96px;text-align:center}
+#vdc{height:auto!important;aspect-ratio:16/9;background:#0f1e3a;cursor:pointer}.vdch{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.vdch button{font-size:.85rem;padding:6px 10px}
+#vdw:fullscreen{background:#000;display:flex;flex-direction:column;justify-content:center;padding:10px}#vdw:fullscreen #vdc{max-height:calc(100vh - 90px);width:auto;max-width:100%;margin:0 auto}
+</style></head><body>
+<header><h1>Markazga intilma kuch</h1><p>10-sinf fizika · Interaktiv simulyatsiyalar, animatsiyalar va virtual tajribalar</p></header>
+<main>
+<div class="tabs"><button class="active" data-tab="video">🎬 Video dars (2 daqiqa)</button><button data-tab="one">1. Kuch tushunchasi</button><button data-tab="two">2. Formula va bog‘liqlik</button><button data-tab="three">3. Hayotiy misollar</button><button data-tab="quiz">Masalalar va test</button></div>
+<section id="video" class="panel active">
+<div class="card"><h2>🎬 Jonli video dars — 2 daqiqa</h2>
+<div id="vdw"><canvas id="vdc" width="960" height="540"></canvas>
+<div class="vdbar"><button class="primary" id="vdp" title="Boshlash / to‘xtatish">▶</button><input id="vds" type="range" min="0" max="1200" value="0"><span id="vdt">0:00 / 2:00</span><button id="vdf" title="To‘liq ekran">⛶</button></div></div>
+<div class="vdch" id="vdch"></div>
+<p class="muted">Video animatsiya va yozma izohlar bilan tayyorlangan. Bo‘limlarni tanlab, kerakli joyidan ko‘rishingiz mumkin.</p></div>
+</section>
+<section id="one" class="panel">
+<div class="card"><h2>1-reja. Markazga intilma kuch nima?</h2><p>Jism aylana bo‘ylab harakatlanganda uning tezlik yo‘nalishi uzluksiz o‘zgaradi. Buning uchun aylana markaziga yo‘nalgan natijaviy kuch kerak. Bu <b>markazga intilma kuch</b> deyiladi.</p><div class="note"><b>Eslab qoling:</b> tezlik vektori urinma bo‘ylab, markazga intilma tezlanish va natijaviy kuch markaz tomon yo‘naladi. Bu alohida yangi kuch emas, balki natijaviy kuchning yo‘nalishidir.</div></div>
+<div class="grid"><div class="card"><h2>Aylana bo‘ylab harakat</h2><label>Tezlik: <span class="value" id="s1v">5</span> m/s</label><input id="s1" type="range" min="1" max="10" step=".5" value="5"><label>Radius: <span class="value" id="r1v">3</span> m</label><input id="r1" type="range" min="1" max="5" step=".5" value="3"><label><input id="showv" type="checkbox" checked> Tezlik vektorini ko‘rsatish</label><label><input id="showa" type="checkbox" checked> Markazga yo‘nalgan vektorni ko‘rsatish</label><div class="controls"><button class="primary" id="play1">▶ Harakatni boshlash</button><button id="reset1">Qayta boshlash</button></div><p class="muted">Vektorlarni kuzating: ko‘k — tezlik, to‘q sariq — markazga intilma tezlanish.</p></div>
+<div class="card"><h2>Aylana animatsiyasi</h2><canvas id="orbit" width="700" height="390"></canvas><div class="stats"><div class="stat"><small>Tezlik</small><strong id="sout">5 m/s</strong></div><div class="stat"><small>Radius</small><strong id="rout">3 m</strong></div><div class="stat"><small>Tezlanish</small><strong id="aout">8.33 m/s²</strong></div></div></div></div>
+<div class="card"><h3>Agar ip uzilsa nima bo‘ladi?</h3><p>Markazga yo‘nalgan kuch yo‘qolsa, jism shu ondagi tezlik yo‘nalishi bo‘yicha — aylana trayektoriyasiga urinma bo‘ylab harakatni davom ettiradi. Bu “tashqariga itarilish” emas, balki inertsiya tufayli tezlik yo‘nalishining saqlanishidir.</p></div>
+</section>
+<section id="two" class="panel">
+<div class="card"><h2>2-reja. Formula va fizik kattaliklarga bog‘liqlik</h2><div class="formula">F = mv²/r &nbsp; va &nbsp; a = v²/r</div><p><b>F</b> — markazga intilma natijaviy kuch (N), <b>m</b> — massa (kg), <b>v</b> — tezlik (m/s), <b>r</b> — radius (m). Formula Nyutonning ikkinchi qonuni F = ma va markazga intilma tezlanish a = v²/r dan kelib chiqadi.</p></div>
+<div class="grid"><div class="card"><h2>Virtual laboratoriya</h2><label>Massa m: <span class="value" id="mv">2</span> kg</label><input id="m" type="range" min=".5" max="10" step=".5" value="2"><label>Tezlik v: <span class="value" id="vv">5</span> m/s</label><input id="v" type="range" min="1" max="20" step=".5" value="5"><label>Radius r: <span class="value" id="rv">3</span> m</label><input id="r" type="range" min=".5" max="10" step=".5" value="3"><div class="controls"><button class="primary" id="calc">Hisoblash</button><button id="resetlab">Qiymatlarni tiklash</button></div><div class="note" id="explain">Qiymatlarni o‘zgartiring va natijani kuzating.</div></div>
+<div class="card"><h2>Hisoblangan natija</h2><canvas id="force" width="700" height="330"></canvas><div class="stats"><div class="stat"><small>Markazga intilma kuch</small><strong id="fo">16.67 N</strong></div><div class="stat"><small>Tezlanish</small><strong id="ao">8.33 m/s²</strong></div><div class="stat"><small>Bog‘liqlik</small><strong>F ∝ mv²/r</strong></div></div></div></div>
+<div class="card"><h3>Virtual tajribalar</h3><ol><li>Tezlikni ikki marta oshiring. Kuch necha marta oshdi?</li><li>Radiusni ikki marta oshiring. Kuch qanday o‘zgaradi?</li><li>Massani ikki marta oshiring. Kuch qanday o‘zgaradi?</li></ol><details><summary><b>Javoblarni ko‘rish</b></summary><p>Tezlik ikki marta oshsa kuch 4 marta oshadi. Radius ikki marta oshsa kuch 2 marta kamayadi. Massa ikki marta oshsa kuch ham 2 marta oshadi.</p></details></div>
+</section>
+<section id="three" class="panel">
+<div class="card"><h2>3-reja. Markazga intilma kuch hayotda</h2><p>Markazga intilma kuch vazifasini turli vaziyatlarda turli kuchlar bajaradi. U alohida yangi turdagi kuch emas — markazga yo‘nalgan natijaviy kuchdir.</p></div>
+<div class="grid"><div class="card"><h2>Vaziyatni tanlang</h2><label>Misol</label><select id="scene"><option value="car">Avtomobil burilishda</option><option value="ball">Ipga bog‘langan shar</option><option value="sat">Yer atrofidagi sun’iy yo‘ldosh</option><option value="planet">Sayyora Quyosh atrofida</option></select><label>Tezlik (model): <span class="value" id="v3v">6</span> m/s</label><input id="v3" type="range" min="2" max="12" step=".5" value="6"><label>Radius (model): <span class="value" id="r3v">4</span> m</label><input id="r3" type="range" min="2" max="8" step=".5" value="4"><div class="controls"><button class="primary" id="play3">▶ Animatsiya</button><button id="reset3">Qayta boshlash</button></div><div class="note" id="desc">Avtomobil burilganda shina va yo‘l orasidagi ishqalanish markazga yo‘nalgan natijaviy kuchni ta’minlaydi.</div></div>
+<div class="card"><h2>Hayotiy vaziyat animatsiyasi</h2><canvas id="sceneCanvas" width="700" height="390"></canvas><p class="muted">Ko‘k — tezlik, to‘q sariq — markazga yo‘nalgan kuch. Sxema tushuntirish uchun soddalashtirilgan.</p></div></div>
+<div class="card"><h3>Qaysi kuch markazga intilma kuch vazifasini bajaradi?</h3><ul><li><b>Avtomobil burilishda:</b> odatda shina va yo‘l orasidagi ishqalanish.</li><li><b>Ipga bog‘langan shar:</b> ip tarangligi (boshqa kuchlar ham bo‘lsa, natijaviy kuch hisoblanadi).</li><li><b>Sun’iy yo‘ldosh va sayyoralar:</b> gravitatsiya kuchi.</li></ul><div class="note">Markazdan qochma kuchni inertsiya sanoq sistemasidagi markazga intilma kuch bilan chalkashtirmang. Markazga intilma kuch markaz tomon yo‘naladi.</div></div>
+</section>
+<section id="quiz" class="panel">
+<div class="card"><h2>Masalalar va yechimlar</h2><div class="grid">
+<div><h3>1-masala</h3><p>m = 2 kg, v = 6 m/s, r = 4 m. F ni toping.</p><details><summary>Yechim</summary><p>F = mv²/r = 2 × 36 / 4 = <b>18 N</b>.</p></details></div>
+<div><h3>2-masala</h3><p>m = 0,5 kg, v = 8 m/s, r = 2 m. F ni toping.</p><details><summary>Yechim</summary><p>F = 0,5 × 64 / 2 = <b>16 N</b>.</p></details></div>
+<div><h3>3-masala</h3><p>Tezlik 3 marta oshdi. Kuch qanday o‘zgaradi?</p><details><summary>Yechim</summary><p>Tezlik kvadratga bog‘liq: kuch <b>9 marta oshadi</b>.</p></details></div>
+<div><h3>4-masala</h3><p>m = 3 kg, v = 5 m/s, r = 2,5 m. Tezlanish va kuchni toping.</p><details><summary>Yechim</summary><p>a = 25/2,5 = 10 m/s²; F = 3 × 10 = <b>30 N</b>.</p></details></div>
+<div><h3>5-masala</h3><p>Radius 2 m dan 8 m ga oshdi. Kuch qanday o‘zgaradi?</p><details><summary>Yechim</summary><p>Radius 4 marta oshdi, demak kuch <b>4 marta kamayadi</b>.</p></details></div>
+<div><h3>6-masala</h3><p>m = 1,5 kg, v = 12 m/s, r = 3 m. F ni toping.</p><details><summary>Yechim</summary><p>F = 1,5 × 144 / 3 = <b>72 N</b>.</p></details></div></div></div>
+<div class="card"><h2>Interaktiv test</h2><form id="quizform">
+<p><b>1.</b> Markazga intilma kuch qaysi tomonga yo‘naladi?</p><label><input type="radio" name="q1" value="a"> Harakat bo‘ylab</label><label><input type="radio" name="q1" value="b"> Aylana markaziga</label><label><input type="radio" name="q1" value="c"> Markazdan tashqariga</label>
+<p><b>2.</b> Formula qaysi?</p><label><input type="radio" name="q2" value="a"> F = mv/r</label><label><input type="radio" name="q2" value="b"> F = mr/v²</label><label><input type="radio" name="q2" value="c"> F = mv²/r</label>
+<p><b>3.</b> Tezlik 3 marta oshsa, kuch necha marta oshadi?</p><label><input type="radio" name="q3" value="a"> 3 marta</label><label><input type="radio" name="q3" value="b"> 6 marta</label><label><input type="radio" name="q3" value="c"> 9 marta</label>
+<p><b>4.</b> Sun’iy yo‘ldosh orbitasida markazga intilma kuchni nima ta’minlaydi?</p><label><input type="radio" name="q4" value="a"> Gravitatsiya</label><label><input type="radio" name="q4" value="b"> Har doim ishqalanish</label><label><input type="radio" name="q4" value="c"> Havo qarshiligi</label>
+<p><b>5.</b> Tezlik vektori aylana trayektoriyasiga qanday yo‘nalgan?</p><label><input type="radio" name="q5" value="a"> Markazga</label><label><input type="radio" name="q5" value="b"> Urinma bo‘ylab</label><label><input type="radio" name="q5" value="c"> Har doim yuqoriga</label>
+<div class="controls"><button class="primary" type="submit">Javoblarni tekshirish</button><button type="reset" id="clear">Tozalash</button></div></form><div class="note" id="result">Javoblarni belgilang va tekshiring.</div></div>
+<div class="card"><h2>Xulosa va uyga vazifa</h2><ul><li>F = mv²/r va a = v²/r.</li><li>Tezlik oshishi kuchni kvadrat qonun bo‘yicha oshiradi.</li><li>Kuchning manbai vaziyatga qarab ishqalanish, taranglik yoki gravitatsiya bo‘lishi mumkin.</li></ul><p><b>Uyga vazifa:</b> m = 4 kg, r = 5 m, v = 10 m/s. Hisoblang: markazga intilma tezlanish va kuch. Kundalik hayotdan 2 ta misol yozing.</p></div>
+</section>
+</main><footer>HTML5 o‘quv materiali. Faylni Chrome yoki boshqa brauzerda oching; internet talab qilinmaydi.</footer>
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===b.dataset.tab));});
+function arrow(c,x,y,X,Y,color,w=4){let a=Math.atan2(Y-y,X-x),h=12;c.strokeStyle=color;c.fillStyle=color;c.lineWidth=w;c.lineCap='round';c.beginPath();c.moveTo(x,y);c.lineTo(X,Y);c.stroke();c.beginPath();c.moveTo(X,Y);c.lineTo(X-h*Math.cos(a-.5),Y-h*Math.sin(a-.5));c.lineTo(X-h*Math.cos(a+.5),Y-h*Math.sin(a+.5));c.closePath();c.fill()}
+function grid(c,w,h){c.clearRect(0,0,w,h);c.fillStyle='#fbfdff';c.fillRect(0,0,w,h);c.strokeStyle='#e8eff6';c.lineWidth=1;for(let x=20;x<w;x+=30){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke()}for(let y=20;y<h;y+=30){c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke()}}
+let ang=0,run1=false,ang3=0,run3=false;
+function orbit(){let c=$('orbit').getContext('2d'),w=700,h=390;grid(c,w,h);let cx=w/2,cy=h/2,r=+$('r1').value*31,v=+$('s1').value;c.strokeStyle='#23976b';c.lineWidth=3;c.beginPath();c.arc(cx,cy,r,0,7);c.stroke();c.fillStyle='#142747';c.beginPath();c.arc(cx,cy,5,0,7);c.fill();let x=cx+r*Math.cos(ang),y=cy+r*Math.sin(ang);c.fillStyle='#2f75c5';c.beginPath();c.arc(x,y,10,0,7);c.fill();if($('showv').checked)arrow(c,x,y,x-Math.sin(ang)*v*8,y+Math.cos(ang)*v*8,'#2f75c5');if($('showa').checked)arrow(c,x,y,x+(cx-x)*.38,y+(cy-y)*.38,'#f09a38');$('s1v').textContent=v;$('r1v').textContent=$('r1').value;$('sout').textContent=v.toFixed(1)+' m/s';$('rout').textContent=(+$('r1').value).toFixed(1)+' m';$('aout').textContent=(v*v/(+$('r1').value)).toFixed(2)+' m/s²'}
+function force(){let c=$('force').getContext('2d'),w=700,h=330;grid(c,w,h);let m=+$('m').value,v=+$('v').value,r=+$('r').value,a=v*v/r,F=m*a,cx=w/2,cy=h/2,rad=Math.min(100,r*14),x=cx+rad;c.strokeStyle='#23976b';c.lineWidth=3;c.beginPath();c.arc(cx,cy,rad,0,7);c.stroke();c.fillStyle='#2f75c5';c.beginPath();c.arc(x,cy,10,0,7);c.fill();arrow(c,x,cy,cx+rad*.3,cy,'#f09a38',Math.min(9,2+F/30));$('mv').textContent=m;$('vv').textContent=v;$('rv').textContent=r;$('fo').textContent=F.toFixed(2)+' N';$('ao').textContent=a.toFixed(2)+' m/s²';$('explain').textContent=`a = v²/r = ${v}²/${r} = ${a.toFixed(2)} m/s²; F = ma = ${m} × ${a.toFixed(2)} = ${F.toFixed(2)} N.`}
+function scene(){let c=$('sceneCanvas').getContext('2d'),w=700,h=390;grid(c,w,h);let kind=$('scene').value,v=+$('v3').value,r=+$('r3').value,cx=350,cy=205,rad=65+r*10; $('v3v').textContent=v;$('r3v').textContent=r;let text='';if(kind==='car'){text='Avtomobil burilganda ishqalanish markazga yo‘nalgan natijaviy kuchni ta’minlaydi.';c.strokeStyle='#64748b';c.lineWidth=24;c.beginPath();c.arc(cx,cy,rad,Math.PI*.8,Math.PI*1.8);c.stroke();let t=ang3%(Math.PI);let a=Math.PI*.8+t,x=cx+rad*Math.cos(a),y=cy+rad*Math.sin(a);c.save();c.translate(x,y);c.rotate(a+Math.PI/2);c.fillStyle='#2f75c5';c.fillRect(-20,-11,40,22);c.restore();arrow(c,x,y,x-Math.sin(a)*v*5,y+Math.cos(a)*v*5,'#2f75c5');arrow(c,x,y,x+(cx-x)*.35,y+(cy-y)*.35,'#f09a38')}else{c.strokeStyle='#23976b';c.lineWidth=3;c.beginPath();c.arc(cx,cy,rad,0,7);c.stroke();let x=cx+rad*Math.cos(ang3),y=cy+rad*Math.sin(ang3);if(kind==='ball'){text='Ip tarangligi sharni markaz tomon tortadi. Ip uzilsa, shar urinma bo‘ylab harakatlanadi.';c.strokeStyle='#64748b';c.beginPath();c.moveTo(cx,cy);c.lineTo(x,y);c.stroke();c.fillStyle='#f09a38';c.beginPath();c.arc(x,y,12,0,7);c.fill()}else{let sat=kind==='sat';text=sat?'Yer gravitatsiyasi sun’iy yo‘ldoshga markazga yo‘nalgan kuch beradi.':'Quyosh gravitatsiyasi sayyoraning orbital harakatini ta’minlaydi.';c.fillStyle=sat?'#23976b':'#f09a38';c.beginPath();c.arc(cx,cy,sat?28:22,0,7);c.fill();c.fillStyle='#f09a38';c.beginPath();c.arc(x,y,10,0,7);c.fill();c.fillStyle='#142747';c.font='bold 14px sans-serif';c.fillText(sat?'Yer':'Quyosh',cx-20,cy+rad*.45)}arrow(c,x,y,x+(cx-x)*.38,y+(cy-y)*.38,'#f09a38');arrow(c,x,y,x-Math.sin(ang3)*v*4,y+Math.cos(ang3)*v*4,'#2f75c5')}$('desc').textContent=text;c.fillStyle='#142747';c.font='bold 15px sans-serif';c.fillText(kind==='car'?'Avtomobil':kind==='ball'?'Ipga bog‘langan shar':kind==='sat'?'Sun’iy yo‘ldosh':'Sayyora',16,25)}
+['s1','r1','showv','showa'].forEach(id=>$(id).addEventListener('input',orbit));['m','v','r'].forEach(id=>$(id).addEventListener('input',force));$('calc').onclick=force;$('resetlab').onclick=()=>{$('m').value=2;$('v').value=5;$('r').value=3;force()};$('play1').onclick=()=>{run1=!run1;$('play1').textContent=run1?'Ⅱ To‘xtatish':'▶ Harakatni boshlash'};$('reset1').onclick=()=>{ang=0;run1=false;$('play1').textContent='▶ Harakatni boshlash';orbit()};['scene','v3','r3'].forEach(id=>$(id).addEventListener('input',scene));$('play3').onclick=()=>{run3=!run3;$('play3').textContent=run3?'Ⅱ To‘xtatish':'▶ Animatsiya'};$('reset3').onclick=()=>{ang3=0;run3=false;$('play3').textContent='▶ Animatsiya';scene()};
+$('quizform').onsubmit=e=>{e.preventDefault();let ans={q1:'b',q2:'c',q3:'c',q4:'a',q5:'b'},n=0;for(let q in ans){let x=document.querySelector(`input[name="${q}"]:checked`);if(x&&x.value===ans[q])n++}$('result').textContent=`Natija: ${n}/5. `+(n===5?'Ajoyib! Barcha javoblar to‘g‘ri.':n>=3?'Yaxshi! Xato javoblarni qayta ko‘rib chiqing.':'Mavzuni o‘qib, simulyatsiyalarni yana sinab ko‘ring.')};$('clear').onclick=()=>{$('result').textContent='Javoblarni belgilang va tekshiring.'};
+function tick(){if(run1)ang+=.025*(+$('s1').value)/5;if(run3)ang3+=.02*(+$('v3').value)/6;orbit();scene();requestAnimationFrame(tick)}orbit();force();scene();requestAnimationFrame(tick);
+(function(){
+const cv=document.getElementById('vdc'),c=cv.getContext('2d'),W=960,H=540,T=120;
+let t=0,playing=false,last=0;
+const BL='#5aa9ff',OR='#f5a142',GR='#3ddc97',RD='#ff6b6b',DIM='#a9bddb';
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),ease=x=>{x=cl(x);return x*x*(3-2*x)},lerp=(a,b,k)=>a+(b-a)*k;
+function tx(s,x,y,sz,col,al,wt){c.font=(wt||'700')+' '+sz+'px system-ui,Arial,sans-serif';c.fillStyle=col;c.textAlign=al||'center';c.textBaseline='middle';c.fillText(s,x,y)}
+function arr(x,y,X,Y,col,w){w=w||5;const a=Math.atan2(Y-y,X-x),h=8+w*1.6;c.strokeStyle=col;c.fillStyle=col;c.lineWidth=w;c.lineCap='round';c.beginPath();c.moveTo(x,y);c.lineTo(X-Math.cos(a)*h*.6,Y-Math.sin(a)*h*.6);c.stroke();c.beginPath();c.moveTo(X,Y);c.lineTo(X-h*Math.cos(a-.45),Y-h*Math.sin(a-.45));c.lineTo(X-h*Math.cos(a+.45),Y-h*Math.sin(a+.45));c.closePath();c.fill()}
+function ball(x,y,r,col){const g=c.createRadialGradient(x-r*.3,y-r*.3,r*.1,x,y,r);g.addColorStop(0,'#fff');g.addColorStop(1,col);c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,7);c.fill()}
+function ring(cx,cy,r,col,w,dash){c.strokeStyle=col;c.lineWidth=w||3;c.setLineDash(dash||[]);c.beginPath();c.arc(cx,cy,r,0,7);c.stroke();c.setLineDash([])}
+function line(x1,y1,x2,y2,col,w,dash){c.strokeStyle=col;c.lineWidth=w||3;c.lineCap='round';c.setLineDash(dash||[]);c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();c.setLineDash([])}
+function box(x,y,w,h,col){c.save();c.strokeStyle=col;c.lineWidth=3;c.fillStyle='rgba(255,255,255,.07)';c.beginPath();c.roundRect(x,y,w,h,14);c.fill();c.stroke();c.restore()}
+function at(u,u0,fn){if(u>=u0){c.save();c.globalAlpha*=ease((u-u0)/.6);fn();c.restore()}}
+
+/* 1. Kirish */
+function s1(u){
+  const y=130-22*(1-ease(u/1.2));
+  tx('Markazga intilma kuch',480,y-40,52,'#fff');
+  at(u,1.2,()=>tx('10-sinf fizika · 2-mavzu · jonli video dars',480,142,22,DIM,'center','600'));
+  const cx=480,cy=315,r=100,th=u*1.6;
+  ring(cx,cy,r,GR,3,[8,8]);
+  for(let k=10;k>=1;k--){c.save();c.globalAlpha*=.05*(11-k);const a=th-k*.09;ball(cx+r*Math.cos(a),cy+r*Math.sin(a),12,BL);c.restore()}
+  const x=cx+r*Math.cos(th),y2=cy+r*Math.sin(th);
+  at(u,3,()=>arr(x,y2,x+(cx-x)*.55,y2+(cy-y2)*.55,OR,5));
+  ball(x,y2,14,BL);ball(cx,cy,6,'#dfe8f5');
+}
+/* 2. Tezlik va tezlanish */
+function s2(u){
+  const cx=480,cy=255,r=145,th0=-.5,w=.9,th=th0+w*u;
+  tx('Aylana bo‘ylab harakat',480,40,30,'#fff');
+  ring(cx,cy,r,GR,3,[8,8]);ball(cx,cy,6,'#dfe8f5');
+  for(let k=-8;k<20;k++){const a=th0+k*Math.PI/4;if(a<th-.2&&a>th-2.9){const gx=cx+r*Math.cos(a),gy=cy+r*Math.sin(a);c.save();c.globalAlpha*=.38;arr(gx,gy,gx-Math.sin(a)*55,gy+Math.cos(a)*55,BL,3);ball(gx,gy,5,'#fff');c.restore()}}
+  const x=cx+r*Math.cos(th),y=cy+r*Math.sin(th),vx=-Math.sin(th),vy=Math.cos(th),ax=-Math.cos(th),ay=-Math.sin(th);
+  arr(x,y,x+vx*85,y+vy*85,BL,5);arr(x,y,x+ax*75,y+ay*75,OR,5);
+  ball(x,y,14,BL);
+  tx('v',x+vx*105,y+vy*105,26,BL);tx('a, F',x+ax*100,y+ay*100,24,OR);
+  tx('→ v — tezlik (urinma bo‘ylab)',28,95,20,BL,'left');tx('→ a, F — markazga yo‘nalgan',28,125,20,OR,'left');
+  at(u,9,()=>tx('Yo‘nalish o‘zgaradi → tezlanish bor',480,430,24,'#fff'));
+}
+/* 3. Ip uzilsa */
+function s3(u){
+  const cx=480,cy=250,r=130,w=1.1,th0=-1.338,uc=5.5;
+  tx('Ip uzilsa nima bo‘ladi?',480,40,30,'#fff');
+  const thc=th0+w*uc,Px=cx+r*Math.cos(thc),Py=cy+r*Math.sin(thc),dx=-Math.sin(thc),dy=Math.cos(thc),sp=r*w;
+  ring(cx,cy,r,GR,2,[6,8]);ball(cx,cy,9,'#cfd8e6');
+  if(u<uc){const th=th0+w*u,x=cx+r*Math.cos(th),y=cy+r*Math.sin(th);
+    line(cx,cy,x,y,'#fff',3);arr(x,y,x+(cx-x)*.45,y+(cy-y)*.45,OR,6);ball(x,y,14,BL);
+    tx('F — ip tarangligi',cx,cy+34,20,OR);
+  }else{const d=u-uc,x=Px+dx*sp*d,y=Py+dy*sp*d;
+    line(Px,Py,x,y,'rgba(90,169,255,.55)',3,[6,6]);
+    c.save();c.globalAlpha*=cl(1-d/2.5);line(cx,cy,cx+(Px-cx)*.5,cy+(Py-cy)*.5,'#fff',3);c.restore();
+    arr(x,y,x+dx*80,y+dy*80,BL,5);ball(x,y,14,BL);tx('v',x+dx*105,y+dy*105-8,26,BL);
+    if(d<3)tx('Ip uzildi!  F = 0',cx,cy+20,34,RD);
+    if(d>3.2)at(u,uc+3.2,()=>{tx('Shar urinma bo‘ylab to‘g‘ri chiziqda',cx,cy+10,28,'#fff');tx('harakatini davom ettiradi (inertsiya)',cx,cy+46,24,DIM,'center','600')});
+  }
+}
+/* 4. Formula */
+function s4(u){
+  tx('Formulani keltirib chiqaramiz',480,40,30,'#fff');
+  at(u,.5,()=>{tx('Nyutonning II qonuni',60,110,22,DIM,'left','600');tx('F = m · a',60,160,48,'#fff','left')});
+  at(u,6,()=>{tx('Markazga intilma tezlanish',60,225,22,DIM,'left','600');tx('a = v² / r',60,275,48,OR,'left')});
+  at(u,12,()=>{tx('Demak',60,335,22,DIM,'left','600');box(45,355,360,80,GR);tx('F = m · v² / r',225,395,48,GR)});
+  const cx=740,cy=225,r=100,th=u*1.2,x=cx+r*Math.cos(th),y=cy+r*Math.sin(th);
+  ring(cx,cy,r,GR,3,[8,8]);ball(cx,cy,6,'#dfe8f5');
+  line(cx,cy,x,y,'rgba(255,255,255,.6)',2,[5,5]);tx('r',cx+(x-cx)/2-14*Math.sin(th),cy+(y-cy)/2+14*Math.cos(th),22,'#fff');
+  arr(x,y,x-Math.sin(th)*65,y+Math.cos(th)*65,BL,4);arr(x,y,x+(cx-x)*.4,y+(cy-y)*.4,OR,4);ball(x,y,12,BL);
+  at(u,19,()=>{[['F — kuch (N)',OR],['m — massa (kg)','#fff'],['v — tezlik (m/s)',BL],['r — radius (m)',GR]].forEach((a,i)=>tx(a[0],640,358+i*26,20,a[1],'left'))});
+}
+/* 5. Bog'liqlik */
+function s5(u){
+  const L=25/3,ph=Math.min(2,Math.floor(u/L)),pu=u-ph*L,k=ease((pu-2)/1.2);
+  tx(['Tezlik 2 marta oshsa','Radius 2 marta oshsa','Massa 2 marta oshsa'][ph],480,40,30,'#fff');
+  tx(['F ∝ v²  →  kuch 4 marta oshadi','F ∝ 1/r  →  kuch 2 marta kamayadi','F ∝ m  →  kuch 2 marta oshadi'][ph],480,82,22,OR);
+  const fac=[4,.5,2][ph],Fr=lerp(1,fac,k),cx=260,cy=265;
+  let r=80,w=91/80,br=13;
+  if(ph===0)w=lerp(1.14,2.28,k);
+  if(ph===1){r=lerp(80,150,k);w=91/r}
+  if(ph===2)br=lerp(11,20,k);
+  const th=w*pu,x=cx+r*Math.cos(th),y=cy+r*Math.sin(th);
+  ring(cx,cy,r,GR,3,[8,8]);ball(cx,cy,6,'#dfe8f5');line(cx,cy,x,y,'rgba(255,255,255,.35)',2);
+  arr(x,y,x+(cx-x)/r*17*Fr,y+(cy-y)/r*17*Fr,OR,6);ball(x,y,br,BL);
+  tx('Tajriba',cx,150,20,DIM,'center','600');
+  const b1=620,b2=790,base=400,unit=50;
+  line(b1-80,base,b2+80,base,'rgba(255,255,255,.4)',2);
+  c.fillStyle=BL;c.fillRect(b1-40,base-unit,80,unit);c.fillStyle=OR;c.fillRect(b2-40,base-unit*Fr,80,unit*Fr);
+  tx('avval',b1,base+22,20,DIM);tx('keyin',b2,base+22,20,DIM);tx('F',b1,base-unit-18,26,'#fff');
+  if(k>.8)tx(['4F','F / 2','2F'][ph],b2,base-unit*Fr-20,28,'#fff');
+}
+/* 6. Hayotiy misollar */
+function s6(u){
+  tx('Kuchni kim ta’minlaydi?',480,40,30,'#fff');
+  const cy=230,r=72,xs=[170,480,790];
+  [['Avtomobil burilishda','ishqalanish kuchi',1.2],['Ipga bog‘langan shar','ip tarangligi',1.5],['Sun’iy yo‘ldosh','gravitatsiya kuchi',1.0]].forEach((p,i)=>{
+    const cx=xs[i],th=p[2]*u+i,x=cx+r*Math.cos(th),y=cy+r*Math.sin(th);
+    if(i===0){ring(cx,cy,r,'#51607a',22);ring(cx,cy,r,'#dfe8f5',2,[10,10]);}else ring(cx,cy,r,GR,2,[6,8]);
+    if(i===1){ball(cx,cy,8,'#cfd8e6');line(cx,cy,x,y,'#fff',3)}
+    if(i===2){ball(cx,cy,24,'#2f9e6b')}
+    if(i===0){c.save();c.translate(x,y);c.rotate(th+Math.PI/2);c.fillStyle=RD;c.beginPath();c.roundRect(-9,-16,18,32,5);c.fill();c.fillStyle='#fff';c.fillRect(-6,-9,12,7);c.restore()}
+    else if(i===1)ball(x,y,13,BL);
+    else{c.save();c.translate(x,y);c.rotate(th+Math.PI/2);c.fillStyle='#dfe8f5';c.fillRect(-6,-6,12,12);c.fillStyle=BL;c.fillRect(-22,-3,14,6);c.fillRect(8,-3,14,6);c.restore()}
+    arr(x,y,x+(cx-x)*.5,y+(cy-y)*.5,OR,4);
+    tx(p[0],cx,350,22,'#fff');tx(p[1],cx,382,20,OR,'center','600');
+  });
+  at(u,6,()=>tx('Har uchala holatda ham kuch markaz tomon yo‘naladi',480,425,22,DIM,'center','600'));
+}
+/* 7. Masala */
+function s7(u){
+  tx('Masala',480,40,32,'#fff');
+  at(u,.3,()=>tx('m = 2 kg,   v = 6 m/s,   r = 4 m',480,115,34,BL));
+  at(u,2,()=>tx('F = m · v² / r',480,185,38,'#fff'));
+  at(u,4,()=>tx('F = 2 · 36 / 4',480,250,38,'#fff'));
+  at(u,6,()=>{box(360,290,240,84,GR);tx('F = 18 N',480,332,50,GR)});
+  at(u,8,()=>tx('Markazga intilma kuch — yangi kuch emas, natijaviy kuchning yo‘nalishi',480,412,21,DIM,'center','600'));
+}
+const SC=[[0,12,s1],[12,32,s2],[32,47,s3],[47,72,s4],[72,97,s5],[97,110,s6],[110,120,s7]];
+const CH=['Kirish','Tezlanish','Ip uzilsa','Formula','Bog‘liqlik','Misollar','Masala'];
+const CAP=[
+[0,12,'Salom! Bugun aylana bo‘ylab harakatlanayotgan jismga qanday kuch ta’sir qilishini o‘rganamiz.'],
+[12,20,'Jism aylana bo‘ylab harakatlanganda uning tezlik vektori har lahzada yo‘nalishini o‘zgartiradi.'],
+[20,32,'Yo‘nalish o‘zgarsa — tezlanish bor. U aylana markaziga yo‘nalgan, shuning uchun natijaviy kuch ham markaz tomon yo‘naladi.'],
+[32,38,'Ip bilan aylantirilayotgan sharni ip tarangligi markazga tortib turadi.'],
+[38,47,'Ip uzilsa, markazga yo‘nalgan kuch yo‘qoladi va shar urinma bo‘ylab to‘g‘ri chiziqda uchib ketadi. Bu — inertsiya.'],
+[47,53,'Nyutonning ikkinchi qonuniga ko‘ra, kuch massa va tezlanish ko‘paytmasiga teng.'],
+[53,59,'Markazga intilma tezlanish tezlik kvadratining radiusga nisbatiga teng.'],
+[59,66,'Ularni birlashtirsak, markazga intilma kuch formulasi hosil bo‘ladi.'],
+[66,72,'Bunda F — kuch, m — massa, v — tezlik, r — aylana radiusi.'],
+[72,80.3,'Tezlik 2 marta oshsa, kuch 4 marta oshadi — chunki kuch tezlikning kvadratiga bog‘liq.'],
+[80.3,88.7,'Radius 2 marta oshsa, kuch 2 marta kamayadi.'],
+[88.7,97,'Massa 2 marta oshsa, kuch ham 2 marta oshadi.'],
+[97,103,'Markazga intilma kuch vazifasini turli kuchlar bajaradi: avtomobilda — ishqalanish, ipdagi sharda — ip tarangligi.'],
+[103,110,'Sun’iy yo‘ldosh va sayyoralarda bu vazifani butun olam tortishish kuchi — gravitatsiya bajaradi.'],
+[110,115,'Masala: massasi 2 kg jism 6 m/s tezlik bilan 4 m radiusli aylana bo‘ylab harakatlanmoqda. Kuchni toping.'],
+[115,120,'F = 2 · 36 / 4 = 18 nyuton. Eslab qoling: bu yangi kuch emas, natijaviy kuchning markazga yo‘nalishidir.']
+];
+function wrap(s,mw){const ws=s.split(' '),ls=[];let cur='';ws.forEach(w=>{const n=cur?cur+' '+w:w;if(c.measureText(n).width>mw&&cur){ls.push(cur);cur=w}else cur=n});if(cur)ls.push(cur);return ls}
+function draw(){
+  const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0f1e3a');g.addColorStop(1,'#1b3a6b');c.fillStyle=g;c.fillRect(0,0,W,H);
+  c.strokeStyle='rgba(255,255,255,.04)';c.lineWidth=1;for(let x=0;x<W;x+=40){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}for(let y=0;y<H;y+=40){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}
+  const tt=Math.min(t,T-.01);
+  SC.forEach((s,i)=>{if(tt>=s[0]&&tt<s[1]){const u=tt-s[0];c.save();c.globalAlpha=Math.min(1,u/.7,i===SC.length-1?9:(s[1]-tt)/.7);s[2](u);c.restore()}});
+  const cp=CAP.find(a=>tt>=a[0]&&tt<a[1]);
+  if(cp){c.fillStyle='rgba(8,16,32,.82)';c.fillRect(0,H-88,W,88);c.font='600 24px system-ui,Arial,sans-serif';const ls=wrap(cp[2],860);ls.forEach((l,i)=>tx(l,W/2,H-44-(ls.length-1)*16+i*32,24,'#fff','center','600'))}
+  const ci=SC.findIndex(s=>tt>=s[0]&&tt<s[1]);tx((ci+1)+'/7 · '+CH[ci],W-18,18,16,'rgba(255,255,255,.55)','right','600');
+  c.fillStyle=GR;c.fillRect(0,H-4,W*t/T,4);
+  if(!playing){c.fillStyle='rgba(8,16,32,.45)';c.fillRect(0,0,W,H-88);c.fillStyle='rgba(255,255,255,.95)';c.beginPath();c.arc(W/2,235,46,0,7);c.fill();
+    if(t>=T-.01){tx('↻',W/2,236,52,'#142747');tx('Qayta ko‘rish',W/2,305,26,'#fff')}
+    else{c.fillStyle='#142747';c.beginPath();c.moveTo(W/2-14,213);c.lineTo(W/2+20,235);c.lineTo(W/2-14,257);c.closePath();c.fill();if(t<.05)tx('Videoni boshlash',W/2,305,26,'#fff')}}
+}
+const bp=document.getElementById('vdp'),sl=document.getElementById('vds'),tl=document.getElementById('vdt'),pan=document.getElementById('video');
+const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+function setPlay(p){if(p&&t>=T)t=0;playing=p;last=performance.now();bp.textContent=p?'Ⅱ':'▶'}
+bp.onclick=()=>setPlay(!playing);cv.onclick=()=>setPlay(!playing);
+sl.oninput=()=>{t=sl.value/10};
+document.getElementById('vdf').onclick=()=>{const w=document.getElementById('vdw');if(document.fullscreenElement)document.exitFullscreen();else if(w.requestFullscreen)w.requestFullscreen()};
+const chw=document.getElementById('vdch');
+SC.forEach((s,i)=>{const b=document.createElement('button');b.textContent=(i+1)+'. '+CH[i];b.onclick=()=>{t=s[0];setPlay(true)};chw.appendChild(b)});
+function frame(now){
+  if(pan.classList.contains('active')){
+    if(playing){t+=Math.min(.1,(now-last)/1000);if(t>=T){t=T;playing=false;bp.textContent='▶'}}
+    last=now;draw();if(document.activeElement!==sl)sl.value=t*10;tl.textContent=fmt(t)+' / 2:00';
+  }else if(playing){setPlay(false)}
+  requestAnimationFrame(frame)
+}
+requestAnimationFrame(frame);
+window.__vd={draw,set:v=>{t=v}};
+})();
+</script></body></html>
